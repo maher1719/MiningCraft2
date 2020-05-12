@@ -19,7 +19,6 @@ public class World : MonoBehaviour
     void Update()
 
     {
-
         for (int x = 0; x < (viewRange / 2); x++)
         {
             for (int z = 0; z < (viewRange / 2); z++)

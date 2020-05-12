@@ -6,7 +6,7 @@ public class Chunk : MonoBehaviour
 {
 
 	public const int ChunkStack = 10;
-	public const int width = 16, Height = 16;
+	public const int width = 5, Height = 5;
 
 
 
@@ -49,7 +49,22 @@ public class Chunk : MonoBehaviour
 		heightMap = new Byte[width, width];
 	}
 
+	public bool isBlockTransparent(int x,int y,int z)
+	{
+		if(x>=width || z>=width || y>=Height || x<0 || y<0|| z < 0)
+		{
 
+		}
+		else
+		{
+			int chunkID = Height / y;
+			return (maps[chunkID][x, y, z] == 0);
+		}
+	}
+	public byte GetBack(Vector3 worldPos)
+	{
+
+	}
 	void Update()
 	{
 		if (dirty)
@@ -109,8 +124,13 @@ public class Chunk : MonoBehaviour
 					{
 						if (map[x, y, z] > 0)
 						{
-
 							AddFace(x, y, z, FaceDir.Top, i);
+							AddFace(x, y, z, FaceDir.Down, i);
+							AddFace(x, y, z, FaceDir.Right, i);
+							AddFace(x, y, z, FaceDir.Left, i);
+							AddFace(x, y, z, FaceDir.Back, i);
+							AddFace(x, y, z, FaceDir.Front, i);
+							
 						}
 					}
 				}
@@ -148,36 +168,133 @@ public class Chunk : MonoBehaviour
 		{
 			colors.Add(new List<Color>());
 		}
+		switch (dir)
+		{
+			case FaceDir.Top:
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+				triangles[chunkID].Add(verts[chunkID].Count + 1);
+
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+				triangles[chunkID].Add(verts[chunkID].Count + 3);
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+
+				verts[chunkID].Add(new Vector3(x + 0, y + 1, z + 0));
+				verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 0));
+				verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 1));
+				verts[chunkID].Add(new Vector3(x + 0, y + 1, z + 1));
+
+				uvs[chunkID].Add(new Vector2(0, 0));
+				uvs[chunkID].Add(new Vector2(1, 0));
+				uvs[chunkID].Add(new Vector2(1, 1));
+				uvs[chunkID].Add(new Vector2(0, 1));
+
+
+				break;
+			case FaceDir.Down:
+				triangles[chunkID].Add(verts[chunkID].Count + 1);
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+				triangles[chunkID].Add(verts[chunkID].Count + 3);
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+
+				verts[chunkID].Add(new Vector3(x + 0, y + 1, z + 0));
+				verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 0));
+				verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 1));
+				verts[chunkID].Add(new Vector3(x + 0, y + 1, z + 1));
+
+				uvs[chunkID].Add(new Vector2(0, 0));
+				uvs[chunkID].Add(new Vector2(1, 0));
+				uvs[chunkID].Add(new Vector2(1, 1));
+				uvs[chunkID].Add(new Vector2(0, 1));
+
+
+				break;
+			case FaceDir.Front:
+				triangles[chunkID].Add(verts[chunkID].Count + 1);
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+				triangles[chunkID].Add(verts[chunkID].Count + 3);
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+
+				verts[chunkID].Add(new Vector3(x + 0, y + 0, z + 1));
+				verts[chunkID].Add(new Vector3(x + 1, y + 0, z + 1));
+				verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 1));
+				verts[chunkID].Add(new Vector3(x + 0, y + 1, z + 1));
+
+				uvs[chunkID].Add(new Vector2(0, 0));
+				uvs[chunkID].Add(new Vector2(1, 0));
+				uvs[chunkID].Add(new Vector2(1, 1));
+				uvs[chunkID].Add(new Vector2(0, 1));
+				break;
+			case FaceDir.Right:
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+				triangles[chunkID].Add(verts[chunkID].Count + 1);
+
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+				triangles[chunkID].Add(verts[chunkID].Count + 3);
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+
+				verts[chunkID].Add(new Vector3(x + 1, y + 0, z + 0));
+				verts[chunkID].Add(new Vector3(x + 1, y + 0, z + 1));
+				verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 1));
+				verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 0));
+
+				uvs[chunkID].Add(new Vector2(0, 0));
+				uvs[chunkID].Add(new Vector2(1, 0));
+				uvs[chunkID].Add(new Vector2(1, 1));
+				uvs[chunkID].Add(new Vector2(0, 1));
+				break;
+			case FaceDir.Left:
+				triangles[chunkID].Add(verts[chunkID].Count + 1);
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+				triangles[chunkID].Add(verts[chunkID].Count + 3);
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+
+				verts[chunkID].Add(new Vector3(x + 1, y + 0, z + 0));
+				verts[chunkID].Add(new Vector3(x + 1, y + 0, z + 1));
+				verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 1));
+				verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 0));
+
+				uvs[chunkID].Add(new Vector2(0, 0));
+				uvs[chunkID].Add(new Vector2(1, 0));
+				uvs[chunkID].Add(new Vector2(1, 1));
+				uvs[chunkID].Add(new Vector2(0, 1));
+				break;
+			case FaceDir.Back:
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+				triangles[chunkID].Add(verts[chunkID].Count + 1);
+
+				triangles[chunkID].Add(verts[chunkID].Count + 0);
+				triangles[chunkID].Add(verts[chunkID].Count + 3);
+				triangles[chunkID].Add(verts[chunkID].Count + 2);
+
+				verts[chunkID].Add(new Vector3(x + 0, y + 0, z + 0));
+				verts[chunkID].Add(new Vector3(x + 1, y + 0, z + 0));
+				verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 0));
+				verts[chunkID].Add(new Vector3(x + 0, y + 1, z + 0));
+
+				uvs[chunkID].Add(new Vector2(0, 0));
+				uvs[chunkID].Add(new Vector2(1, 0));
+				uvs[chunkID].Add(new Vector2(1, 1));
+				uvs[chunkID].Add(new Vector2(0, 1));
+				break;
+			default:
+				break;
+
+		}
 		if (dir == FaceDir.Top)
 		{
-
-			triangles[chunkID].Add(verts[chunkID].Count + 0);
-			triangles[chunkID].Add(verts[chunkID].Count + 2);
-			triangles[chunkID].Add(verts[chunkID].Count + 1);
-
-			triangles[chunkID].Add(verts[chunkID].Count + 0);
-			triangles[chunkID].Add(verts[chunkID].Count + 3);
-			triangles[chunkID].Add(verts[chunkID].Count + 2);
-
-			verts[chunkID].Add(new Vector3(x + 0, y + 1, z + 0));
-			verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 0));
-			verts[chunkID].Add(new Vector3(x + 1, y + 1, z + 1));
-			verts[chunkID].Add(new Vector3(x + 0, y + 1, z + 1));
-
-			uvs[chunkID].Add(new Vector2(0, 0));
-			uvs[chunkID].Add(new Vector2(1, 0));
-			uvs[chunkID].Add(new Vector2(1, 1));
-			uvs[chunkID].Add(new Vector2(0, 1));
-
-
-			triangles[chunkID].Add(0);
-			triangles[chunkID].Add(2);
-			triangles[chunkID].Add(1);
-
-
-			triangles[chunkID].Add(0);
-			triangles[chunkID].Add(3);
-			triangles[chunkID].Add(2);
+			
 		}
 
 	}
